@@ -1,20 +1,14 @@
 
-
 import asyncio
-from orm import Model, StringField, IntegerField,create_pool,select
+import orm
+from models import User, Blog, Comment
 
-
-class User(Model):
-    __table__ = 'users'
-
-    id = IntegerField(primary_key=True)
-    name = StringField()
-
-#以下为测试
 loop = asyncio.get_event_loop()
-loop.run_until_complete(create_pool(host='127.0.0.1', port=3306,user='test', password='test',db='test', loop=loop))
+async def test():
+    await orm.create_pool(user='test', password='test', db='test',loop=loop)
 
+    u = User(name='Test', email='test@example.com', passwd='1234567890', image='about:blank')
 
-rs = loop.run_until_complete(select('select * from users where id=? and name=?',(1,'ricky')))
-#获取到了数据库返回的数据
-print("heh:%s" % rs)
+    await u.save()
+
+loop.run_until_complete(test())

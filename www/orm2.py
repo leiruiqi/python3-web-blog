@@ -6,7 +6,6 @@ __author__ = 'Michael Liao'
 import asyncio, logging
 
 import aiomysql
-
 from error import StandardError
 
 def log(sql, args=()):
