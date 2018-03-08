@@ -30,4 +30,9 @@ def api_get_users(request):
     users = yield from User.findAll(orderBy='created_at desc')
     for u in users:
         u.passwd = '******'
-    return dict(users=users)
+    ##return dict(users=users)
+    return {
+        '__template__': 'test.html',
+        'users': users
+    }
+
