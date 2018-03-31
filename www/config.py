@@ -7,7 +7,7 @@ Configuration
 
 __author__ = 'Michael Liao'
 
-import config_default
+import config_default,os
 
 class Dict(dict):
     '''
@@ -47,9 +47,13 @@ def toDict(d):
 
 configs = config_default.configs
 
+env = os.getenv('env')
+print(env)
 try:
-    import config_override
-    configs = merge(configs, config_override.configs)
+
+    if env == 'pro':
+        import config_override
+        configs = merge(configs, config_override.configs)
 except ImportError:
     pass
 

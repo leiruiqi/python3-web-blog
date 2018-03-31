@@ -60,6 +60,7 @@ class Page(object):
     __repr__ = __str__
 
 
+
 class APIError(Exception):
     '''
     the base APIError which contains error(required), data(optional) and message(optional).

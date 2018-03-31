@@ -10,3 +10,7 @@ sig.parameters.values()
 sig.parameters.keys()
 for name, param in sig.parameters.items():
     print(name+' type=',param.kind)
+
+
+from config import configs
+print(configs)

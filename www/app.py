@@ -13,8 +13,9 @@ from jinja2 import Environment, FileSystemLoader
 
 import orm
 from coroweb import add_routes, add_static
+from config import configs
 
-from handlers import auth_factory
+from bizauth import auth_factory
 
 def init_jinja2(app, **kw):
     logging.info('init jinja2...')
@@ -111,12 +112,17 @@ def datetime_filter(t):
 
 
 async def init(loop):
-    await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='test', password='test', db='test')
+    ##await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='test', password='test', db='test')
+    await orm.create_pool(loop=loop, **configs.db)
+
     app = web.Application(loop=loop, middlewares=[
         logger_factory, auth_factory, response_factory
     ])
     init_jinja2(app, filters=dict(datetime=datetime_filter))
-    add_routes(app, 'handlers')
+    add_routes(app, 'handlers_blog')
+    add_routes(app, 'handlers_user')
+    add_routes(app, 'handlers_manage')
+    add_routes(app, 'handlers_comment')
     add_static(app)
     srv = await loop.create_server(app.make_handler(), '127.0.0.1', 9000)
     logging.info('server started at http://127.0.0.1:9000...')
