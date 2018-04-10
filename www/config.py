@@ -47,8 +47,17 @@ def toDict(d):
 
 configs = config_default.configs
 
-env = os.getenv('env')
-print(env)
+
+import sys,getopt
+env='dev'
+opts, args = getopt.getopt(sys.argv[1:],'', ['env='])
+for op, value in opts:
+    if (op == '--env'):
+        print('env',value)
+        env = value
+
+
+print('env=',env)
 try:
 
     if env == 'pro':

@@ -12,7 +12,7 @@ import os, re
 from datetime import datetime
 from fabric.api import *
 
-env.user = 'www'
+env.user = 'root'
 env.sudo_user = 'root'
 env.hosts = ['60.205.219.231']
 
@@ -23,7 +23,7 @@ _TAR_FILE = 'dist-blog.tar.gz'
 
 _REMOTE_TMP_TAR = '/tmp/%s' % _TAR_FILE
 
-_REMOTE_BASE_DIR = '/srv/awesome'
+_REMOTE_BASE_DIR = '/home/www/blog'
 
 def _current_path():
     return os.path.abspath('.')
