@@ -37,7 +37,7 @@ def kill_process():
 def start_process():
     global process, command
     log('Start process %s...' % ' '.join(command))
-    os.putenv('env',command[2])
+    ##os.putenv('env',command[2])
     process = subprocess.Popen(command, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr)
 
 def restart_process():
