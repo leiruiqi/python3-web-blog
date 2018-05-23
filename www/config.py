@@ -9,6 +9,13 @@ __author__ = 'Michael Liao'
 
 import config_default,os
 
+class Category():
+    def __init__(self,id,name):
+        self.id = id
+        self.name = name
+
+categorys = [Category('1','日志'),Category('2','编程')]
+
 class Dict(dict):
     '''
     Simple dict but support access as x.y style.

@@ -2,6 +2,7 @@
 import asyncio
 import orm,orm2
 from models import User, Blog, Comment
+from search import search_article_tech
 
 loop = asyncio.get_event_loop()
 async def test():
@@ -19,4 +20,8 @@ async def saveTest():
                 name='一个好人', summary='这世界变化快', content='不是我不懂，这世界变化快')
     await blog.save()
 
-loop.run_until_complete(saveTest())
+async def essearchTest():
+    result = await search_article_tech.searchAll4Page(None)
+    print(len(result))
+
+loop.run_until_complete(essearchTest())

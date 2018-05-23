@@ -1,14 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
+__author__ = 'Ricky Lei'
 
-import re, time, json, logging, hashlib, base64, asyncio,markdown2
+import markdown2
 from coroweb import get, post
 from apis import Page,APIError,APIValueError,APIPermissionError,APIResourceNotFoundError
-from bizauth import COOKIE_NAME,user2cookie,_RE_EMAIL,_RE_SHA1,check_admin
 from utils import get_page_index
-from models import User,Blog,Comment, next_id
-from aiohttp import web
+from search import search_article_tech
 
-@get('/')
+
+@get('/new_tech')
 async def index(*,page='1',category='1'):
     # summary = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
     # blogs = [
@@ -27,7 +29,7 @@ async def index(*,page='1',category='1'):
     if num == 0:
         blogs = []
     else:
-        blogs = await Blog.findAll('category_id='+category,None,orderBy='created_at desc', limit=(page.offset, page.limit))
+        blogs = await search_article_tech.getById()
     return {
         '__template__': 'blogs.html',
         'page': page,
@@ -38,7 +40,7 @@ def text2html(text):
     lines = map(lambda s: '<p>%s</p>' % s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'), filter(lambda s: s.strip() != '', text.split('\n')))
     return ''.join(lines)
 
-@get('/blog/{id}')
+@get('/new_tech/{id}')
 async def get_blog(id):
     blog = await Blog.find(id)
     comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
@@ -54,7 +56,7 @@ async def get_blog(id):
 
 
 
-@get('/api/blogs')
+@get('/api/new_tech')
 async def api_blogs(*, page='1'):
     page_index = get_page_index(page)
     num = await Blog.findNumber('count(id)')
@@ -63,8 +65,3 @@ async def api_blogs(*, page='1'):
         return dict(page=p, blogs=())
     blogs = await Blog.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
     return dict(page=p, blogs=blogs)
-
-
-
-
-
