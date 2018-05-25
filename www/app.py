@@ -124,6 +124,7 @@ async def init(loop):
     add_routes(app, 'handlers_user')
     add_routes(app, 'handlers_manage')
     add_routes(app, 'handlers_comment')
+    add_routes(app, 'handlers_new_tech')
     add_static(app)
     srv = await loop.create_server(app.make_handler(), '127.0.0.1', 9000)
     logging.info('server started at http://127.0.0.1:9000...')

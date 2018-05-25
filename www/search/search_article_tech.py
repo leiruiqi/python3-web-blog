@@ -35,7 +35,7 @@ async def getByIds(ids):
     return result
 
 
-async def searchAll4Page(fromid):
+async def searchAll4Page(fromid,pageSize=5):
     query = None
     if fromid is not None and fromid >0:
         query= {

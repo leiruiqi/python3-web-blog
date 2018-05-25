@@ -11,7 +11,7 @@ from search import search_article_tech
 
 
 @get('/new_tech')
-async def index(*,page='1',category='1'):
+async def index(*,fromId=None,pageSize=10):
     # summary = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
     # blogs = [
     #     Blog(id='1', name='Test Blog', summary=summary, created_at=time.time()-120),
@@ -22,18 +22,13 @@ async def index(*,page='1',category='1'):
     #     '__template__': 'blogs.html',
     #     'blogs': blogs
     # }
-    page_index = get_page_index(page)
-    num = await Blog.findNumber('count(id)','category_id='+category)
-    page = Page(num,page_index)
+    #page_index = get_page_index(page)
 
-    if num == 0:
-        blogs = []
-    else:
-        blogs = await search_article_tech.getById()
+
+    news = await search_article_tech.searchAll4Page(fromId=fromId,pageSize=pageSize)
     return {
-        '__template__': 'blogs.html',
-        'page': page,
-        'blogs': blogs
+        '__template__': 'news.html',
+        'news': news
     }
 
 def text2html(text):
@@ -41,27 +36,19 @@ def text2html(text):
     return ''.join(lines)
 
 @get('/new_tech/{id}')
-async def get_blog(id):
-    blog = await Blog.find(id)
-    comments = await Comment.findAll('blog_id=?', [id], orderBy='created_at desc')
-    for c in comments:
-        c.html_content = text2html(c.content)
-    blog.html_content = markdown2.markdown(blog.content)
+async def get_new(id):
+    new = await search_article_tech.getById(id)
+
     return {
-        '__template__': 'blog.html',
-        'blog': blog,
-        'comments': comments
+        '__template__': 'new.html',
+        'new': new,
     }
 
 
 
 
 @get('/api/new_tech')
-async def api_blogs(*, page='1'):
-    page_index = get_page_index(page)
-    num = await Blog.findNumber('count(id)')
-    p = Page(num, page_index)
-    if num == 0:
-        return dict(page=p, blogs=())
-    blogs = await Blog.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
-    return dict(page=p, blogs=blogs)
+async def api_news(*,fromId=20190128009309,pageSize=10):
+
+    news = await search_article_tech.searchAll4Page(fromId)
+    return news
